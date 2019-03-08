@@ -595,8 +595,7 @@ namespace Laser_data_processor
                     Stream s = File.Open(saveFileDialog1.FileName, FileMode.CreateNew);
                     StreamWriter sw = new StreamWriter(s);
 
-                    sw.WriteLine(pipe1._diameter.ToString("0.##")+" mm"); // 파이프의 직경
-
+                    sw.WriteLine(Convert.ToInt32(pipe1._diameter)); //파이프의 직경
                     
                     SHOW_N_S_W_E(pipe1._normal_vector, sw); //Pipe1 Start dir
 
@@ -615,7 +614,7 @@ namespace Laser_data_processor
                     double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
                                                    Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
                                                    Math.Pow((pipe1._center_point.Z - pipe2._center_point.Z), 2));
-                    sw.WriteLine(distance.ToString("0.##"+" mm")); //Dist: 두 중점 사이의 거리
+                    sw.WriteLine(Convert.ToInt32(distance)); //Dist: 두 중점 사이의 거리
 
                     SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //Start 단면
 
