@@ -326,43 +326,43 @@ namespace Laser_data_processor
         {
             try
             {
-            Point3d p1 = null;
-            Point3d p2 = null;
-            Point3d p3 = null;
+                Point3d p1 = null;
+                Point3d p2 = null;
+                Point3d p3 = null;
 
-           
-             p1 = Get_Point_from_Textbox(tbPoint1);
-             p2 = Get_Point_from_Textbox(tbPoint2);
-             p3 = Get_Point_from_Textbox(tbPoint3);
-           
 
-            if ((p1 != null)&&(p2 != null)&&(p3 != null))
-            {
-                pipe1 = new Pipe(p1, p2, p3);
-                pipe1.Set_Info_To_TextBox(tbCenter_P1,tbDiameter);
-                //텍스트박스에 중점의 좌표와 직경을 표시해준다.
-            }
+                p1 = Get_Point_from_Textbox(tbPoint1);
+                p2 = Get_Point_from_Textbox(tbPoint2);
+                p3 = Get_Point_from_Textbox(tbPoint3);
 
-            Console.WriteLine();
-            Console.WriteLine("pipe1's center point(Laser Origin)");
-            SHOW_N_S_W_E(pipe1._center_point);
 
-            Console.WriteLine("pipe1's normal vector");
-            SHOW_N_S_W_E(pipe1._normal_vector);
-            //********************************
+                if ((p1 != null) && (p2 != null) && (p3 != null))
+                {
+                    pipe1 = new Pipe(p1, p2, p3);
+                    pipe1.Set_Info_To_TextBox(tbCenter_P1, tbDiameter);
+                    //텍스트박스에 중점의 좌표와 직경을 표시해준다.
+                }
 
-            double[] vec1 = { 1, 0, 0, pipe1._center_point.X };
-            double[] vec2 = { 0, 1, 0, pipe1._center_point.Y };
-            double[] vec3 = { 0, 0, 1, pipe1._center_point.Z };
-            double[] vec4 = { 0, 0, 0, 1 };
+                Console.WriteLine();
+                Console.WriteLine("pipe1's center point(Laser Origin)");
+                SHOW_N_S_W_E(pipe1._center_point);
 
-            Matrix4d translation = new Matrix4d(vec1, vec2, vec3, vec4, (int)MyEnum.row_type);
-            Console.WriteLine("translation to pipe1's center point");
-            Console.WriteLine(translation);
-            Console.WriteLine();
-            Console.WriteLine("Inverse of translation");
-            Console.WriteLine(translation.Inverse());
-            inv_H = translation.Inverse();
+                Console.WriteLine("pipe1's normal vector");
+                SHOW_N_S_W_E(pipe1._normal_vector);
+                //********************************
+
+                double[] vec1 = { 1, 0, 0, pipe1._center_point.X };
+                double[] vec2 = { 0, 1, 0, pipe1._center_point.Y };
+                double[] vec3 = { 0, 0, 1, pipe1._center_point.Z };
+                double[] vec4 = { 0, 0, 0, 1 };
+
+                Matrix4d translation = new Matrix4d(vec1, vec2, vec3, vec4, (int)MyEnum.row_type);
+                Console.WriteLine("translation to pipe1's center point");
+                Console.WriteLine(translation);
+                Console.WriteLine();
+                Console.WriteLine("Inverse of translation");
+                Console.WriteLine(translation.Inverse());
+                inv_H = translation.Inverse();
 
             }
             catch (Exception ex)
@@ -376,28 +376,28 @@ namespace Laser_data_processor
         {
             try
             {
-            Point3d p4 = null;
-            Point3d p5 = null;
-            Point3d p6 = null;
+                Point3d p4 = null;
+                Point3d p5 = null;
+                Point3d p6 = null;
 
-          
+
                 p4 = Get_Point_from_Textbox(tbPoint4);
                 p5 = Get_Point_from_Textbox(tbPoint5);
                 p6 = Get_Point_from_Textbox(tbPoint6);
-           
 
-            if ((p4 != null) && (p5 != null) && (p6 != null))
-            {
-                pipe2 = new Pipe(p4, p5, p6);
-                pipe2.Set_Info_To_TextBox(tbCenter_P2);
-            }
 
-            Console.WriteLine("pipe2's center point (Laser Origin)");
-            SHOW_N_S_W_E(pipe2._center_point);
-            //Console.WriteLine(pipe2._center_point);
+                if ((p4 != null) && (p5 != null) && (p6 != null))
+                {
+                    pipe2 = new Pipe(p4, p5, p6);
+                    pipe2.Set_Info_To_TextBox(tbCenter_P2);
+                }
 
-            Console.WriteLine("pipe2's normal vector");
-            SHOW_N_S_W_E(pipe2._normal_vector);
+                Console.WriteLine("pipe2's center point (Laser Origin)");
+                SHOW_N_S_W_E(pipe2._center_point);
+                //Console.WriteLine(pipe2._center_point);
+
+                Console.WriteLine("pipe2's normal vector");
+                SHOW_N_S_W_E(pipe2._normal_vector);
                 //Console.WriteLine(pipe2_normal);
             }
             catch (Exception ex)
@@ -411,23 +411,23 @@ namespace Laser_data_processor
         {
             try
             {
-            double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
-                                        Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
-                                        Math.Pow((pipe1._center_point.Z - pipe2._center_point.Z), 2));
-            tbDistance.Text = distance.ToString("0.##");
-           
+                double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
+                                            Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
+                                            Math.Pow((pipe1._center_point.Z - pipe2._center_point.Z), 2));
+                tbDistance.Text = distance.ToString("0.##");
 
-            //바뀐 좌표계 U, N, E에서의 파이프2의 중심좌표
-            Console.WriteLine();
-            Console.WriteLine("Distance between pipe1 and pipe2 (mm)");
-            Point3d cp = pipe2._center_point.Copy();
-            Vector4d pipe2_CenterPoint = new Vector4d(cp.X, cp.Y, cp.Z, 1);
-            Vector4d res_cp = inv_H.Mult(pipe2_CenterPoint);
-            Point3d res = new Point3d(res_cp.X, res_cp.Y, res_cp.Z);
-            string temp = string.Format("  {0,7:0.##} , {1,7:0.##} , {2,7:0.##}  ", res_cp.X, res_cp.Y, res_cp.Z);
-            tb_pipe2_cp_by_pipe1.Text = temp;
-            Console.WriteLine("pipe2's center point (pipe1's view point)");
-            SHOW_N_S_W_E(res);
+
+                //바뀐 좌표계 U, N, E에서의 파이프2의 중심좌표
+                Console.WriteLine();
+                Console.WriteLine("Distance between pipe1 and pipe2 (mm)");
+                Point3d cp = pipe2._center_point.Copy();
+                Vector4d pipe2_CenterPoint = new Vector4d(cp.X, cp.Y, cp.Z, 1);
+                Vector4d res_cp = inv_H.Mult(pipe2_CenterPoint);
+                Point3d res = new Point3d(res_cp.X, res_cp.Y, res_cp.Z);
+                string temp = string.Format("  {0,7:0.##} , {1,7:0.##} , {2,7:0.##}  ", res_cp.X, res_cp.Y, res_cp.Z);
+                tb_pipe2_cp_by_pipe1.Text = temp;
+                Console.WriteLine("pipe2's center point (pipe1's view point)");
+                SHOW_N_S_W_E(res);
             }
             catch (Exception)
             {
@@ -435,7 +435,7 @@ namespace Laser_data_processor
             }
         }
 
-        private Matrix3d Rotation_From_Two_Vector( Vector3d v1, Vector3d v2)
+        private Matrix3d Rotation_From_Two_Vector(Vector3d v1, Vector3d v2)
         {
             Vector3d w = v1.Cross(v2).Normalized;
             Matrix3d K = w.Make_Skew_Matrix();
@@ -447,7 +447,7 @@ namespace Laser_data_processor
         }
         private double[] Transfromation_to_Euler_angle(Matrix3d R)
         {
-            double[] angle = { 0,0,0 };
+            double[] angle = { 0, 0, 0 };
             // alpha, beta, gamma sequence
 
             //beta
@@ -511,7 +511,7 @@ namespace Laser_data_processor
             Console.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2], angle_EN, angle_NU);
 
         }
-        private void SHOW_N_S_W_E(Point3d p1,StreamWriter file)
+        private void SHOW_N_S_W_E(Point3d p1, StreamWriter file)
         {
             Point3d p = p1.Copy();
             char[] dir = { 'E', 'N', 'U' };
@@ -532,9 +532,9 @@ namespace Laser_data_processor
             }
             file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", p.X, p.Y, p.Z);
         }
-        private void SHOW_N_S_W_E(Vector3d v1,StreamWriter file)
+        private void SHOW_N_S_W_E(Vector3d v1, StreamWriter file)
         {
-            Vector3d v = -v1.Copy(); 
+            Vector3d v = -v1.Copy();
             // -를 곱해주는 이유는 2번째,3번째 줄의 데이터 형식을 맞춰주기 위함이다.
             //파이프에서 나가는 방향이 아니라 들어가는 방향으로 법선벡터를 잡아주어야 한다.
 
@@ -562,15 +562,15 @@ namespace Laser_data_processor
             }
 
 
-            if( v.X > v.Y && v.X> v.Z)
+            if (v.X > v.Y && v.X > v.Z)
             {
                 file.WriteLine(dir[0]);
             }
-            if( v.Y > v.X && v.Y> v.Z)
+            if (v.Y > v.X && v.Y > v.Z)
             {
                 file.WriteLine(dir[1]);
             }
-            if( v.Z > v.X && v.Z> v.Y)
+            if (v.Z > v.X && v.Z > v.Y)
             {
                 file.WriteLine(dir[2]);
             }
@@ -607,21 +607,27 @@ namespace Laser_data_processor
         //Save Text file button
         private void button13_Click(object sender, EventArgs e)
         {
-            
+
             try
             {
-                if (pipe1 == null||pipe2==null) throw new ArgumentNullException();
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                if (pipe1 == null || pipe2 == null) throw new ArgumentNullException();
 
-                saveFileDialog1.FileName = "DefaultOutputName.txt";
-                saveFileDialog1.Filter = "Text File | *.txt";
-                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                System.IO.Directory.CreateDirectory("D:\\PDMS_OUTPUT\\ACEENG\\MODEL_DATA");
+                string path = "D:\\PDMS_OUTPUT\\ACEENG\\MODEL_DATA\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+                path = getNextFileName(path);
+
+                using (StreamWriter sw = new StreamWriter(path))
                 {
-                    Stream s = File.Open(saveFileDialog1.FileName, FileMode.CreateNew);
-                    StreamWriter sw = new StreamWriter(s);
+                    //    SaveFileDialog saveFileDialog1 = new SaveFileDialog();  // 대화상자 생성코드
+                    //        saveFileDialog1.FileName = "DefaultOutputName.txt";
+                    //               saveFileDialog1.Filter = "Text File | *.txt";
+                    //               if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    //             {
+                    //Stream s = File.Open(saveFileDialog1.FileName, FileMode.CreateNew);
+                    //StreamWriter sw = new StreamWriter(s);
 
                     sw.WriteLine(Convert.ToInt32(pipe1._diameter)); //파이프의 직경
-                    
+
                     SHOW_N_S_W_E(pipe1._normal_vector, sw); //Pipe1 Start dir
 
                     SHOW_N_S_W_E(pipe2._normal_vector, sw); //Pipe2 End dir
@@ -649,11 +655,29 @@ namespace Laser_data_processor
                     sw.Close();
                 }
             }
+
             catch (Exception ex)
             {
                 MessageBox.Show("pipe에 대한 데이터가 부족합니다.");
             }
-            }
-        }
- }
+        } 
 
+
+        static private string getNextFileName(string fileName)
+        {
+            string extension = Path.GetExtension(fileName);
+
+            int i = 0;
+            while (File.Exists(fileName))
+            {
+                if (i == 0)
+                    fileName = fileName.Replace(extension, " (" + ++i + ")" + extension);
+                else
+                    fileName = fileName.Replace(" (" + i + ")" + extension, " (" + ++i + ")" + extension);
+            }
+
+            return fileName;
+        }
+
+    }
+}
