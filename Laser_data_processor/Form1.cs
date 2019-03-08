@@ -13,11 +13,26 @@ using System.Threading;
 using System.Globalization;
 using robot_vector;
 
-//의문사항
 
-//윈폼 크로스 스레드
-//윈폼 GUI 업데이트는 언제 일어나는가?
+/* 개발 사항
+ 1.  Data용 폴더 생성해서  D:\PDMS_OUTPUT\ACEENG\MODEL_DATA에 저장
+(대화상자 불필요)
 
+2. 저장양식 파일이름 : 날짜_회차 (날짜별로 회차 새로 시작)
+
+3. 저장하기 전에 파일 이름이 이렇게 저장될 거라는 팝업 표시
+
+4. 파이프 게임 해볼 것
+
+5.  그 외 ppt 수정사항
+- 1번 줄:  	mm 제거
+- 2,3번 줄 : 여러 벡터로 나오면 그중에서 제일 영향이 큰 벡터 방향으로 저장
+- 6번 줄 : WSD 방향 빼고 -로 표기, 소수점 이하는 삭제
+-7번 줄: mm 제거
+- 8,9번 줄: 일단 마지막 단면의 회전각도는 0,0,0 으로 다 처리
+
+6. 소수점 둘 째 자리까진 안중요하다. 
+*/
 namespace Laser_data_processor
 {
     public partial class Form1 : Form
