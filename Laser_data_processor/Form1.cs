@@ -534,7 +534,16 @@ namespace Laser_data_processor
         }
         private void SHOW_N_S_W_E(Vector3d v1,StreamWriter file)
         {
-            Vector3d v = v1.Copy();
+            Vector3d v = -v1.Copy(); 
+            // -를 곱해주는 이유는 2번째,3번째 줄의 데이터 형식을 맞춰주기 위함이다.
+            //파이프에서 나가는 방향이 아니라 들어가는 방향으로 법선벡터를 잡아주어야 한다.
+
+            //또 다른 조건으로는, E,N,U 세 축 모두 방향을 표시할 게 아니라 가장 
+            //성분이 큰 방향 하나만 나타낸다.
+            // 간혹 E 45 N 이런 식으로 사이 값이 나온다고 하는데, 
+            // 먼저 테스트로 제일 성분 큰 방향 한 개 방향만 나타내도록 하자.
+
+
             char[] dir = { 'E', 'N', 'U' };
             if (v.X < 0)
             {
@@ -551,7 +560,23 @@ namespace Laser_data_processor
                 dir[2] = 'D';
                 v.Z = -v.Z;
             }
-            file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", v.X, v.Y, v.Z);
+
+
+            if( v.X > v.Y && v.X> v.Z)
+            {
+                file.WriteLine(dir[0]);
+            }
+            if( v.Y > v.X && v.Y> v.Z)
+            {
+                file.WriteLine(dir[1]);
+            }
+            if( v.Z > v.X && v.Z> v.Y)
+            {
+                file.WriteLine(dir[2]);
+            }
+
+            //file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", v.X, v.Y, v.Z);
+            Console.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", v.X, v.Y, v.Z);
 
         }
         private void SHOW_N_S_W_E_Plane_angle(Vector3d v1, StreamWriter file)
