@@ -609,17 +609,17 @@ namespace Laser_data_processor
                     Vector4d pipe2_CenterPoint = new Vector4d(cp.X, cp.Y, cp.Z, 1);
                     Vector4d res_cp = inv_H.Mult(pipe2_CenterPoint);
                     Point3d res = new Point3d(res_cp.X, res_cp.Y, res_cp.Z);
-                    SHOW_N_S_W_E(res, sw); //End좌표
+                    sw.WriteLine(res.X.ToString("N0") + "," + res.Y.ToString("N0") + "," + res.Z.ToString("N0"));//End좌표
 
                     double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
                                                    Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
                                                    Math.Pow((pipe1._center_point.Z - pipe2._center_point.Z), 2));
                     sw.WriteLine(Convert.ToInt32(distance)); //Dist: 두 중점 사이의 거리
 
-                    SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //Start 단면
-
-                    SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
-
+                    // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //Start 단면
+                    sw.WriteLine("0,0,0");
+                    // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
+                    sw.WriteLine("0,0,0");
                     sw.Dispose();
                     sw.Close();
                 }
