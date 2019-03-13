@@ -15,23 +15,19 @@ using robot_vector;
 
 
 /* 개발 사항
- 1.  Data용 폴더 생성해서  D:\PDMS_OUTPUT\ACEENG\MODEL_DATA에 저장
-(대화상자 불필요)
+1. 파이프1, 파이프2 순서를 바꾸어서 한번 테스트 할 것
+될 수 있다면 파이프2의 중앙점이 + + 가 많이 나올 수 있게 구현
 
-2. 저장양식 파일이름 : 날짜_회차 (날짜별로 회차 새로 시작)
+2. (중요) 파이프 진행 방향을 (원래버전으로) 반전 할 것
 
-3. 저장하기 전에 파일 이름이 이렇게 저장될 거라는 팝업 표시
+3. 중간중간 계산결과들을 저장해서 불러올 수 있도록 구현
 
-4. 파이프 게임 해볼 것
+4. 저장은 여기에 된다는 것을 알림
 
-5.  그 외 ppt 수정사항
-- 1번 줄:  	mm 제거
-- 2,3번 줄 : 여러 벡터로 나오면 그중에서 제일 영향이 큰 벡터 방향으로 저장
-- 6번 줄 : WSD 방향 빼고 -로 표기, 소수점 이하는 삭제
--7번 줄: mm 제거
-- 8,9번 줄: 일단 마지막 단면의 회전각도는 0,0,0 으로 다 처리
+5. (중요) 파일이름에 공백 제거
 
-6. 소수점 둘 째 자리까진 안중요하다. 
+6. (중요) 천단위 콤마 제거
+
 */
 namespace Laser_data_processor
 {
@@ -534,9 +530,10 @@ namespace Laser_data_processor
         }
         private void SHOW_N_S_W_E(Vector3d v1, StreamWriter file)
         {
-            Vector3d v = -v1.Copy();
-            // -를 곱해주는 이유는 2번째,3번째 줄의 데이터 형식을 맞춰주기 위함이다.
-            //파이프에서 나가는 방향이 아니라 들어가는 방향으로 법선벡터를 잡아주어야 한다.
+            Vector3d v = v1.Copy();
+            //Vector3d v = -v1.Copy();
+          // v1.copy() 앞의 -를 다시 없애서 원래 코드로 다시 복귀했다.
+          // 파이프 단면 방향을 다시 반전 시켜주기 위해서다.
 
             //또 다른 조건으로는, E,N,U 세 축 모두 방향을 표시할 게 아니라 가장 
             //성분이 큰 방향 하나만 나타낸다.
@@ -612,9 +609,12 @@ namespace Laser_data_processor
             {
                 if (pipe1 == null || pipe2 == null) throw new ArgumentNullException();
 
-                System.IO.Directory.CreateDirectory("D:\\PDMS_OUTPUT\\ACEENG\\MODEL_DATA");
-                string path = "D:\\PDMS_OUTPUT\\ACEENG\\MODEL_DATA\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+                string dir = "D:\\PDMS_OUTPUT\\ACEENG\\MODEL_DATA";
+                System.IO.Directory.CreateDirectory(dir);
+                string path = dir + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
                 path = getNextFileName(path);
+
+                MessageBox.Show("아래 경로에 파일이 저장됩니다.\n"+"저장경로: " + dir+ "\n"+"파일이름: "+ Path.GetFileName(path));
 
                 using (StreamWriter sw = new StreamWriter(path))
                 {
@@ -640,7 +640,8 @@ namespace Laser_data_processor
                     Vector4d pipe2_CenterPoint = new Vector4d(cp.X, cp.Y, cp.Z, 1);
                     Vector4d res_cp = inv_H.Mult(pipe2_CenterPoint);
                     Point3d res = new Point3d(res_cp.X, res_cp.Y, res_cp.Z);
-                    sw.WriteLine(res.X.ToString("N0") + "," + res.Y.ToString("N0") + "," + res.Z.ToString("N0"));//End좌표
+                    //sw.WriteLine(res.X.ToString("N0") + "," + res.Y.ToString("N0") + "," + res.Z.ToString("N0"));
+                    sw.WriteLine(Convert.ToInt32(res.X) + "," + Convert.ToInt32(res.Y) +"," + Convert.ToInt32(res.Z)); //End좌표
 
                     double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
                                                    Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
@@ -666,14 +667,15 @@ namespace Laser_data_processor
         static private string getNextFileName(string fileName)
         {
             string extension = Path.GetExtension(fileName);
+            
 
             int i = 0;
             while (File.Exists(fileName))
             {
                 if (i == 0)
-                    fileName = fileName.Replace(extension, " (" + ++i + ")" + extension);
+                    fileName = fileName.Replace(extension, "(" + ++i + ")" + extension);
                 else
-                    fileName = fileName.Replace(" (" + i + ")" + extension, " (" + ++i + ")" + extension);
+                    fileName = fileName.Replace("(" + i + ")" + extension, "(" + ++i + ")" + extension);
             }
 
             return fileName;
