@@ -625,33 +625,64 @@ namespace Laser_data_processor
                     //             {
                     //Stream s = File.Open(saveFileDialog1.FileName, FileMode.CreateNew);
                     //StreamWriter sw = new StreamWriter(s);
-
-                    sw.WriteLine(Convert.ToInt32(pipe1._diameter)); //파이프의 직경
-
-                    SHOW_N_S_W_E(pipe1._normal_vector, sw); //Pipe1 Start dir
-
-                    SHOW_N_S_W_E(pipe2._normal_vector, sw); //Pipe2 End dir
-
-                    sw.WriteLine("0"); // Start 좌표: 0,0,0
-
-                    sw.WriteLine("0"); //0 무조건 입력
-
+    
                     Point3d cp = pipe2._center_point.Copy();
-                    Vector4d pipe2_CenterPoint = new Vector4d(cp.X, cp.Y, cp.Z, 1);
-                    Vector4d res_cp = inv_H.Mult(pipe2_CenterPoint);
+                    Vector4d res_cp = inv_H.Mult(new Vector4d(cp.X, cp.Y, cp.Z, 1));
                     Point3d res = new Point3d(res_cp.X, res_cp.Y, res_cp.Z);
-                    //sw.WriteLine(res.X.ToString("N0") + "," + res.Y.ToString("N0") + "," + res.Z.ToString("N0"));
-                    sw.WriteLine(Convert.ToInt32(res.X) + "," + Convert.ToInt32(res.Y) +"," + Convert.ToInt32(res.Z)); //End좌표
+                    int cnt = 0; //End좌표중 부호가 양수인 갯수를 기록
+                    if (res.X > 0) cnt++;
+                    if (res.Y > 0) cnt++;
+                    if (res.Z > 0) cnt++;
+
+                    sw.WriteLine(Convert.ToInt32(pipe1._diameter)); //첫째 줄 : 파이프의 직경
+
+                    if (cnt >= 2) { // 양수가 많으면 정상대로 기록
+                        SHOW_N_S_W_E(pipe1._normal_vector, sw); //둘째 줄: Pipe1 Start dir
+                        SHOW_N_S_W_E(pipe2._normal_vector, sw); //셋째 줄: Pipe2 End dir
+                    }
+                    else
+                    {//음수가 많으면 파이프 1,2 기록순서를 스왑해준다.
+                        SHOW_N_S_W_E(pipe2._normal_vector, sw); //둘째 줄: Pipe1 Start dir
+                        SHOW_N_S_W_E(pipe1._normal_vector, sw); //셋째 줄: Pipe2 End dir
+                    }
+
+                    sw.WriteLine("0"); //넷째 줄: Start 좌표: 0,0,0
+
+                    sw.WriteLine("0"); //다섯째 줄: 0 무조건 입력
+
+                    if (cnt >= 2)
+                    { //양수가 많으므로 정상적으로 기록
+                        sw.WriteLine(Convert.ToInt32(res.X) + "," + Convert.ToInt32(res.Y) + "," + Convert.ToInt32(res.Z)); //여섯째 줄: End좌표
+                    }
+                    else
+                    {
+                     //음수가 많으므로 파이프1과 파이프2의 관점을 스왑해줌
+                     //그래서 부호를 바꿔주어야 한다.
+                        sw.WriteLine(Convert.ToInt32(-res.X) + "," + Convert.ToInt32(-res.Y) + "," + Convert.ToInt32(-res.Z)); //여섯째 줄: End좌표
+                    }
+
 
                     double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
                                                    Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
                                                    Math.Pow((pipe1._center_point.Z - pipe2._center_point.Z), 2));
-                    sw.WriteLine(Convert.ToInt32(distance)); //Dist: 두 중점 사이의 거리
+                    sw.WriteLine(Convert.ToInt32(distance)); //일곱번째 줄: Dist: 두 중점 사이의 거리
 
-                    // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //Start 단면
-                    sw.WriteLine("0,0,0");
-                    // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
-                    sw.WriteLine("0,0,0");
+                    if (cnt >= 2)//양수가 많으므로 정상적으로 기록
+                    {
+                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //  Start 단면
+                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
+                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                    }
+
+                    else //음수가 많으므로 파이프 1과 파이프2의 기록 순서 변경!
+                    {
+                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //  Start 단면
+                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //End 단면
+                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                    }
+                    
                     sw.Dispose();
                     sw.Close();
                 }
