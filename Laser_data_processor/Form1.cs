@@ -15,18 +15,18 @@ using robot_vector;
 
 
 /* 개발 사항
-1. 파이프1, 파이프2 순서를 바꾸어서 한번 테스트 할 것
-될 수 있다면 파이프2의 중앙점이 + + 가 많이 나올 수 있게 구현
+1. 8번줄 9번줄은 0,0,0 으로 고정
+(왜냐하면 파이프 진행방향으로부터 플랜지가 기울어 져서 붙는건데 우리 레이저 시스템은 플랜지와 파이프 진행방향은 항상 90도로 붙는다고 가정하고 측정을한다. 이녀석은 PDMS에서 그래픽적으로 형성을 못하고 문자로만 표시해준다.)
+-> 추후 전체 회의에서 논의하겠다.
 
-2. (중요) 파이프 진행 방향을 (원래버전으로) 반전 할 것
+2. 둘째 셋째 줄 데이터만 바꿔서 측정을 해보고 파이프를 만들어 준다.
+( 물어보니 파이프가 완전히 3차원 모든 방향으로 기울어 지는 경우는 매우 드문케이스라 한다.
+파이프는 주로 모든방향에 수직으로 진행이 되는데, 간혹 45도로 진행되는 경우가 조금씩 있다고 한다.)
 
-3. 중간중간 계산결과들을 저장해서 불러올 수 있도록 구현
-
-4. 저장은 여기에 된다는 것을 알림
-
-5. (중요) 파일이름에 공백 제거
-
-6. (중요) 천단위 콤마 제거
+3. 둘째 셋째 줄을 테스트할 목적으로 save 버튼을 세 가지 버전으로 만든다.
+v1은  E, N, U 축중 가장 큰 방향 한개만(W,S,D도 가능) 저장하는 버전
+v2는  E, N 축 사이 각도를 저장하는 버전
+v3은  E, N 축 사이 각도, N, U축 사이 각도 두 개를 표시해주는 버전
 
 */
 namespace Laser_data_processor
@@ -507,27 +507,27 @@ namespace Laser_data_processor
             Console.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2], angle_EN, angle_NU);
 
         }
-        private void SHOW_N_S_W_E(Point3d p1, StreamWriter file)
-        {
-            Point3d p = p1.Copy();
-            char[] dir = { 'E', 'N', 'U' };
-            if (p.X < 0)
-            {
-                dir[0] = 'W';
-                p.X = -p.X;
-            }
-            if (p.Y < 0)
-            {
-                dir[1] = 'S';
-                p.Y = -p.Y;
-            }
-            if (p.Z < 0)
-            {
-                dir[2] = 'D';
-                p.Z = -p.Z;
-            }
-            file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", p.X, p.Y, p.Z);
-        }
+        //private void SHOW_N_S_W_E(Point3d p1, StreamWriter file)
+        //{
+        //    Point3d p = p1.Copy();
+        //    char[] dir = { 'E', 'N', 'U' };
+        //    if (p.X < 0)
+        //    {
+        //        dir[0] = 'W';
+        //        p.X = -p.X;
+        //    }
+        //    if (p.Y < 0)
+        //    {
+        //        dir[1] = 'S';
+        //        p.Y = -p.Y;
+        //    }
+        //    if (p.Z < 0)
+        //    {
+        //        dir[2] = 'D';
+        //        p.Z = -p.Z;
+        //    }
+        //    file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", p.X, p.Y, p.Z);
+        //}
         private void SHOW_N_S_W_E(Vector3d v1, StreamWriter file)
         {
             Vector3d v = v1.Copy();
@@ -573,11 +573,11 @@ namespace Laser_data_processor
             }
 
             //file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", v.X, v.Y, v.Z);
-            Console.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", v.X, v.Y, v.Z);
+          //  Console.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2] + " {2:0.##}", v.X, v.Y, v.Z);
 
         }
         private void SHOW_N_S_W_E_Plane_angle(Vector3d v1, StreamWriter file)
-        {
+        { //각도 2개 모두 기록
             Vector3d v = v1.Copy();
             char[] dir = { 'E', 'N', 'U' };
             if (v.X < 0)
@@ -597,12 +597,35 @@ namespace Laser_data_processor
             }
             double angle_EN = R2D(Math.Atan2(v.Y, v.X));
             double angle_NU = R2D(Math.Atan2(v.Z, Math.Sqrt(v.X * v.X + v.Y * v.Y)));
-            file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2], angle_EN, angle_NU);
-
+            file.WriteLine(dir[0] + " " + Convert.ToInt32(angle_EN) + " " + dir[1] + " " + Convert.ToInt32(angle_NU)+ " " +dir[2]);
+            //file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2], angle_EN, angle_NU);
+        }
+        private void SHOW_N_S_W_E_Plane_angle_ver2(Vector3d v1, StreamWriter file)
+        { // 각도 1개만 기록
+            Vector3d v = v1.Copy();
+            char[] dir = { 'E', 'N', 'U' };
+            if (v.X < 0)
+            {
+                dir[0] = 'W';
+                v.X = -v.X;
+            }
+            if (v.Y < 0)
+            {
+                dir[1] = 'S';
+                v.Y = -v.Y;
+            }
+            if (v.Z < 0)
+            {
+                dir[2] = 'D';
+                v.Z = -v.Z;
+            }
+            double angle_EN = R2D(Math.Atan2(v.Y, v.X));
+            double angle_NU = R2D(Math.Atan2(v.Z, Math.Sqrt(v.X * v.X + v.Y * v.Y)));
+            file.WriteLine(dir[0] + " " + Convert.ToInt32(angle_EN) + " " + dir[1]);
         }
 
         //Save Text file button
-        private void button13_Click(object sender, EventArgs e)
+        private void button13_Click(object sender, EventArgs e)//v1은  E, N, U 축중 가장 큰 방향 한개만(W,S,D도 가능) 저장하는 버전
         {
 
             try
@@ -712,5 +735,190 @@ namespace Laser_data_processor
             return fileName;
         }
 
+        private void button14_Click(object sender, EventArgs e)//v2는  E, N 축 사이 각도를 저장하는 버전
+        {
+            try
+            {
+                if (pipe1 == null || pipe2 == null) throw new ArgumentNullException();
+
+                string dir = "D:\\PDMS_OUTPUT\\ACEENG\\MODEL_DATA";
+                System.IO.Directory.CreateDirectory(dir);
+                string path = dir + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+                path = getNextFileName(path);
+
+                MessageBox.Show("아래 경로에 파일이 저장됩니다.\n" + "저장경로: " + dir + "\n" + "파일이름: " + Path.GetFileName(path));
+
+                using (StreamWriter sw = new StreamWriter(path))
+                {
+                    //    SaveFileDialog saveFileDialog1 = new SaveFileDialog();  // 대화상자 생성코드
+                    //        saveFileDialog1.FileName = "DefaultOutputName.txt";
+                    //               saveFileDialog1.Filter = "Text File | *.txt";
+                    //               if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    //             {
+                    //Stream s = File.Open(saveFileDialog1.FileName, FileMode.CreateNew);
+                    //StreamWriter sw = new StreamWriter(s);
+
+                    Point3d cp = pipe2._center_point.Copy();
+                    Vector4d res_cp = inv_H.Mult(new Vector4d(cp.X, cp.Y, cp.Z, 1));
+                    Point3d res = new Point3d(res_cp.X, res_cp.Y, res_cp.Z);
+                    int cnt = 0; //End좌표중 부호가 양수인 갯수를 기록
+                    if (res.X > 0) cnt++;
+                    if (res.Y > 0) cnt++;
+                    if (res.Z > 0) cnt++;
+
+                    sw.WriteLine(Convert.ToInt32(pipe1._diameter)); //첫째 줄 : 파이프의 직경
+
+                    if (cnt >= 2)
+                    { // 양수가 많으면 정상대로 기록
+                        SHOW_N_S_W_E_Plane_angle_ver2(pipe1._normal_vector, sw); //둘째 줄: Pipe1 Start dir
+                        SHOW_N_S_W_E_Plane_angle_ver2(pipe2._normal_vector, sw); //셋째 줄: Pipe2 End dir
+
+                    }
+                    else
+                    {//음수가 많으면 파이프 1,2 기록순서를 스왑해준다.
+                        SHOW_N_S_W_E_Plane_angle_ver2(pipe2._normal_vector, sw); //둘째 줄: Pipe1 Start dir
+                        SHOW_N_S_W_E_Plane_angle_ver2(pipe1._normal_vector, sw); //셋째 줄: Pipe2 End dir
+                    }
+
+                    sw.WriteLine("0"); //넷째 줄: Start 좌표: 0,0,0
+
+                    sw.WriteLine("0"); //다섯째 줄: 0 무조건 입력
+
+                    if (cnt >= 2)
+                    { //양수가 많으므로 정상적으로 기록
+                        sw.WriteLine(Convert.ToInt32(res.X) + "," + Convert.ToInt32(res.Y) + "," + Convert.ToInt32(res.Z)); //여섯째 줄: End좌표
+                    }
+                    else
+                    {
+                        //음수가 많으므로 파이프1과 파이프2의 관점을 스왑해줌
+                        //그래서 부호를 바꿔주어야 한다.
+                        sw.WriteLine(Convert.ToInt32(-res.X) + "," + Convert.ToInt32(-res.Y) + "," + Convert.ToInt32(-res.Z)); //여섯째 줄: End좌표
+                    }
+
+
+                    double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
+                                                   Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
+                                                   Math.Pow((pipe1._center_point.Z - pipe2._center_point.Z), 2));
+                    sw.WriteLine(Convert.ToInt32(distance)); //일곱번째 줄: Dist: 두 중점 사이의 거리
+
+                    if (cnt >= 2)//양수가 많으므로 정상적으로 기록
+                    {
+                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //  Start 단면
+                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
+                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                    }
+
+                    else //음수가 많으므로 파이프 1과 파이프2의 기록 순서 변경!
+                    {
+                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //  Start 단면
+                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //End 단면
+                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                    }
+
+                    sw.Dispose();
+                    sw.Close();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("pipe에 대한 데이터가 부족합니다.");
+            }
+        }
+
+        private void button15_Click(object sender, EventArgs e)//v3은  E, N 축 사이 각도, N, U축 사이 각도 두 개를 표시해주는 버전
+        {
+            try
+            {
+                if (pipe1 == null || pipe2 == null) throw new ArgumentNullException();
+
+                string dir = "D:\\PDMS_OUTPUT\\ACEENG\\MODEL_DATA";
+                System.IO.Directory.CreateDirectory(dir);
+                string path = dir + "\\" + DateTime.Now.ToString("yyyy-MM-dd") + ".txt";
+                path = getNextFileName(path);
+
+                MessageBox.Show("아래 경로에 파일이 저장됩니다.\n" + "저장경로: " + dir + "\n" + "파일이름: " + Path.GetFileName(path));
+
+                using (StreamWriter sw = new StreamWriter(path))
+                {
+                    //    SaveFileDialog saveFileDialog1 = new SaveFileDialog();  // 대화상자 생성코드
+                    //        saveFileDialog1.FileName = "DefaultOutputName.txt";
+                    //               saveFileDialog1.Filter = "Text File | *.txt";
+                    //               if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                    //             {
+                    //Stream s = File.Open(saveFileDialog1.FileName, FileMode.CreateNew);
+                    //StreamWriter sw = new StreamWriter(s);
+
+                    Point3d cp = pipe2._center_point.Copy();
+                    Vector4d res_cp = inv_H.Mult(new Vector4d(cp.X, cp.Y, cp.Z, 1));
+                    Point3d res = new Point3d(res_cp.X, res_cp.Y, res_cp.Z);
+                    int cnt = 0; //End좌표중 부호가 양수인 갯수를 기록
+                    if (res.X > 0) cnt++;
+                    if (res.Y > 0) cnt++;
+                    if (res.Z > 0) cnt++;
+
+                    sw.WriteLine(Convert.ToInt32(pipe1._diameter)); //첫째 줄 : 파이프의 직경
+
+                    if (cnt >= 2)
+                    { // 양수가 많으면 정상대로 기록
+                        SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //둘째 줄: Pipe1 Start dir
+                        SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //셋째 줄: Pipe2 End dir
+
+                    }
+                    else
+                    {//음수가 많으면 파이프 1,2 기록순서를 스왑해준다.
+                        SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //둘째 줄: Pipe1 Start dir
+                        SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //셋째 줄: Pipe2 End dir
+                    }
+
+                    sw.WriteLine("0"); //넷째 줄: Start 좌표: 0,0,0
+
+                    sw.WriteLine("0"); //다섯째 줄: 0 무조건 입력
+
+                    if (cnt >= 2)
+                    { //양수가 많으므로 정상적으로 기록
+                        sw.WriteLine(Convert.ToInt32(res.X) + "," + Convert.ToInt32(res.Y) + "," + Convert.ToInt32(res.Z)); //여섯째 줄: End좌표
+                    }
+                    else
+                    {
+                        //음수가 많으므로 파이프1과 파이프2의 관점을 스왑해줌
+                        //그래서 부호를 바꿔주어야 한다.
+                        sw.WriteLine(Convert.ToInt32(-res.X) + "," + Convert.ToInt32(-res.Y) + "," + Convert.ToInt32(-res.Z)); //여섯째 줄: End좌표
+                    }
+
+
+                    double distance = Math.Sqrt(Math.Pow((pipe1._center_point.X - pipe2._center_point.X), 2) +
+                                                   Math.Pow((pipe1._center_point.Y - pipe2._center_point.Y), 2) +
+                                                   Math.Pow((pipe1._center_point.Z - pipe2._center_point.Z), 2));
+                    sw.WriteLine(Convert.ToInt32(distance)); //일곱번째 줄: Dist: 두 중점 사이의 거리
+
+                    if (cnt >= 2)//양수가 많으므로 정상적으로 기록
+                    {
+                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //  Start 단면
+                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
+                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                    }
+
+                    else //음수가 많으므로 파이프 1과 파이프2의 기록 순서 변경!
+                    {
+                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //  Start 단면
+                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //End 단면
+                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                    }
+
+                    sw.Dispose();
+                    sw.Close();
+                }
+            }
+
+            catch (Exception ex)
+            {
+                MessageBox.Show("pipe에 대한 데이터가 부족합니다.");
+            }
+        }
     }
 }
