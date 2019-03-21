@@ -15,18 +15,11 @@ using robot_vector;
 
 
 /* 개발 사항
-1. 8번줄 9번줄은 0,0,0 으로 고정
-(왜냐하면 파이프 진행방향으로부터 플랜지가 기울어 져서 붙는건데 우리 레이저 시스템은 플랜지와 파이프 진행방향은 항상 90도로 붙는다고 가정하고 측정을한다. 이녀석은 PDMS에서 그래픽적으로 형성을 못하고 문자로만 표시해준다.)
--> 추후 전체 회의에서 논의하겠다.
+1. 두번째 세번째는 대표 방향만 나타낼 것
 
-2. 둘째 셋째 줄 데이터만 바꿔서 측정을 해보고 파이프를 만들어 준다.
-( 물어보니 파이프가 완전히 3차원 모든 방향으로 기울어 지는 경우는 매우 드문케이스라 한다.
-파이프는 주로 모든방향에 수직으로 진행이 되는데, 간혹 45도로 진행되는 경우가 조금씩 있다고 한다.)
+2. 마지막 두 줄(플랜지 방향)은 E 30 N 40 U20 이런식으로 나타낼것
 
-3. 둘째 셋째 줄을 테스트할 목적으로 save 버튼을 세 가지 버전으로 만든다.
-v1은  E, N, U 축중 가장 큰 방향 한개만(W,S,D도 가능) 저장하는 버전
-v2는  E, N 축 사이 각도를 저장하는 버전
-v3은  E, N 축 사이 각도, N, U축 사이 각도 두 개를 표시해주는 버전
+3. 만약 E 70 N 20 U 이런 방식이면, N 20 E 20 U 이렇게 문자 순서를 바꾸고  90도 중 작은 각도로 나타낼 것
 
 */
 namespace Laser_data_processor
@@ -597,8 +590,17 @@ namespace Laser_data_processor
             }
             double angle_EN = R2D(Math.Atan2(v.Y, v.X));
             double angle_NU = R2D(Math.Atan2(v.Z, Math.Sqrt(v.X * v.X + v.Y * v.Y)));
-            file.WriteLine(dir[0] + " " + Convert.ToInt32(angle_EN) + " " + dir[1] + " " + Convert.ToInt32(angle_NU)+ " " +dir[2]);
-            //file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2], angle_EN, angle_NU);
+
+            if (angle_EN < 45)
+            { //45도 보다 작으면 E num N 순으로 작성
+                file.WriteLine(dir[0] + " " + Convert.ToInt32(angle_EN) + " " + dir[1] + " " + Convert.ToInt32(angle_NU) + " " + dir[2]);
+            }
+            else
+            { // 45도 보다 크면 N 90-num E 순으로 순서를 한 번 바꿔준다.
+                angle_EN = 90 - angle_EN;
+                file.WriteLine(dir[1] + " " + Convert.ToInt32(angle_EN) + " " + dir[0] + " " + Convert.ToInt32(angle_NU) + " " + dir[2]);
+            }
+                //file.WriteLine(dir[0] + " {0:0.##} " + dir[1] + " {1:0.##} " + dir[2], angle_EN, angle_NU);
         }
         private void SHOW_N_S_W_E_Plane_angle_ver2(Vector3d v1, StreamWriter file)
         { // 각도 1개만 기록
@@ -692,18 +694,18 @@ namespace Laser_data_processor
 
                     if (cnt >= 2)//양수가 많으므로 정상적으로 기록
                     {
-                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //  Start 단면
-                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
-                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
-                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                        SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //  Start 단면
+                        SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //End 단면
+                        //sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        //sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
                     }
 
                     else //음수가 많으므로 파이프 1과 파이프2의 기록 순서 변경!
                     {
-                        // SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //  Start 단면
-                        sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
-                        // SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //End 단면
-                        sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
+                         SHOW_N_S_W_E_Plane_angle(pipe2._normal_vector, sw); //  Start 단면
+                         SHOW_N_S_W_E_Plane_angle(pipe1._normal_vector, sw); //End 단면
+                        //sw.WriteLine("0,0,0"); // 여덟번째 줄: Start 단면;
+                        //sw.WriteLine("0,0,0"); //마지막 줄 : end 단면
                     }
                     
                     sw.Dispose();
