@@ -71,8 +71,6 @@
             this.tb_pipe2_cp_by_pipe1 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.button13 = new System.Windows.Forms.Button();
-            this.button14 = new System.Windows.Forms.Button();
-            this.button15 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -486,33 +484,11 @@
             this.button13.UseVisualStyleBackColor = true;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
-            // button14
-            // 
-            this.button14.Location = new System.Drawing.Point(194, 603);
-            this.button14.Name = "button14";
-            this.button14.Size = new System.Drawing.Size(120, 21);
-            this.button14.TabIndex = 32;
-            this.button14.Text = "Save Text File v2";
-            this.button14.UseVisualStyleBackColor = true;
-            this.button14.Click += new System.EventHandler(this.button14_Click);
-            // 
-            // button15
-            // 
-            this.button15.Location = new System.Drawing.Point(367, 603);
-            this.button15.Name = "button15";
-            this.button15.Size = new System.Drawing.Size(127, 21);
-            this.button15.TabIndex = 33;
-            this.button15.Text = "Save Text File v3";
-            this.button15.UseVisualStyleBackColor = true;
-            this.button15.Click += new System.EventHandler(this.button15_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(527, 636);
-            this.Controls.Add(this.button15);
-            this.Controls.Add(this.button14);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.tb_pipe2_cp_by_pipe1);
@@ -586,8 +562,6 @@
         private System.Windows.Forms.TextBox tb_pipe2_cp_by_pipe1;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button button13;
-        private System.Windows.Forms.Button button14;
-        private System.Windows.Forms.Button button15;
     }
 }
 
