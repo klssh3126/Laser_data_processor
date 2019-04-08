@@ -737,5 +737,45 @@ namespace Laser_data_processor
             return fileName;
         }
 
+        private void button14_Click(object sender, EventArgs e)
+        {
+            if (_SP.IsOpen)
+            {
+                // Read Laser
+
+                float MaxRange = 5000;
+                float Percentage = (float)numValue1.Value / 100; // 100 %
+                Int16 num = Convert.ToInt16(((MaxRange - 100) * Percentage + 100));
+                byte[] value = BitConverter.GetBytes(num);
+                byte[] frame = new byte[4];
+                frame[0] = 0x01; // Id code
+                frame[1] = 0x01; // motor 1
+                frame[2] = value[1];
+                frame[3] = value[0];
+                _SP.Write(frame, 0, frame.Length);
+                Thread.Sleep(100);
+            }
+
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            if (_SP.IsOpen)
+            {
+                // Read Laser
+
+                float MaxRange = 2000;
+                float Percentage = (float)numValue2.Value / 100; // 100 %
+                Int16 num = Convert.ToInt16(((MaxRange - 100) * Percentage + 100));
+                byte[] value = BitConverter.GetBytes(num);
+                byte[] frame = new byte[4];
+                frame[0] = 0x01; // Id code
+                frame[1] = 0x02; // motor 2
+                frame[2] = value[1];
+                frame[3] = value[0];
+                _SP.Write(frame, 0, frame.Length);
+                Thread.Sleep(100);
+            }
+        }
     }
 }

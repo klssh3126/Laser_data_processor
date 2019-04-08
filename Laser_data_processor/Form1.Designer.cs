@@ -71,8 +71,16 @@
             this.tb_pipe2_cp_by_pipe1 = new System.Windows.Forms.TextBox();
             this.label16 = new System.Windows.Forms.Label();
             this.button13 = new System.Windows.Forms.Button();
+            this.numValue1 = new System.Windows.Forms.NumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.numValue2 = new System.Windows.Forms.NumericUpDown();
+            this.button14 = new System.Windows.Forms.Button();
+            this.button15 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numValue1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numValue2)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -104,7 +112,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(78, 77);
+            this.button2.Location = new System.Drawing.Point(80, 66);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -115,7 +123,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(33, 82);
+            this.label2.Location = new System.Drawing.Point(35, 71);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(37, 12);
             this.label2.TabIndex = 4;
@@ -130,7 +138,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(159, 77);
+            this.button3.Location = new System.Drawing.Point(161, 66);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 9;
@@ -208,7 +216,7 @@
             this.panel1.ForeColor = System.Drawing.SystemColors.ControlText;
             this.panel1.Location = new System.Drawing.Point(14, 111);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(493, 203);
+            this.panel1.Size = new System.Drawing.Size(564, 203);
             this.panel1.TabIndex = 18;
             // 
             // tbDiameter
@@ -306,7 +314,7 @@
             this.panel2.Controls.Add(this.tbPoint4);
             this.panel2.Location = new System.Drawing.Point(14, 348);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(493, 179);
+            this.panel2.Size = new System.Drawing.Size(564, 179);
             this.panel2.TabIndex = 20;
             // 
             // button11
@@ -443,9 +451,9 @@
             // 
             this.button12.Location = new System.Drawing.Point(367, 541);
             this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(75, 21);
+            this.button12.Size = new System.Drawing.Size(211, 49);
             this.button12.TabIndex = 28;
-            this.button12.Text = "Calculate";
+            this.button12.Text = " Calculate";
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.button12_Click);
             // 
@@ -476,19 +484,77 @@
             // 
             // button13
             // 
-            this.button13.Location = new System.Drawing.Point(367, 593);
+            this.button13.Location = new System.Drawing.Point(24, 603);
             this.button13.Name = "button13";
-            this.button13.Size = new System.Drawing.Size(117, 21);
+            this.button13.Size = new System.Drawing.Size(554, 21);
             this.button13.TabIndex = 31;
             this.button13.Text = "Save Text File v1";
             this.button13.UseVisualStyleBackColor = true;
             this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
+            // numValue1
+            // 
+            this.numValue1.Location = new System.Drawing.Point(377, 29);
+            this.numValue1.Name = "numValue1";
+            this.numValue1.Size = new System.Drawing.Size(120, 21);
+            this.numValue1.TabIndex = 32;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(283, 32);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(83, 12);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "Motor1 Speed";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(283, 66);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(83, 12);
+            this.label18.TabIndex = 34;
+            this.label18.Text = "Motor2 Speed";
+            // 
+            // numValue2
+            // 
+            this.numValue2.Location = new System.Drawing.Point(377, 62);
+            this.numValue2.Name = "numValue2";
+            this.numValue2.Size = new System.Drawing.Size(120, 21);
+            this.numValue2.TabIndex = 35;
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(503, 26);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(75, 23);
+            this.button14.TabIndex = 27;
+            this.button14.Text = "OK";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
+            // button15
+            // 
+            this.button15.Location = new System.Drawing.Point(503, 62);
+            this.button15.Name = "button15";
+            this.button15.Size = new System.Drawing.Size(75, 23);
+            this.button15.TabIndex = 36;
+            this.button15.Text = "OK";
+            this.button15.UseVisualStyleBackColor = true;
+            this.button15.Click += new System.EventHandler(this.button15_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(527, 636);
+            this.ClientSize = new System.Drawing.Size(600, 636);
+            this.Controls.Add(this.button15);
+            this.Controls.Add(this.button14);
+            this.Controls.Add(this.numValue2);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.numValue1);
             this.Controls.Add(this.button13);
             this.Controls.Add(this.label16);
             this.Controls.Add(this.tb_pipe2_cp_by_pipe1);
@@ -512,6 +578,8 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numValue1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numValue2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -562,6 +630,12 @@
         private System.Windows.Forms.TextBox tb_pipe2_cp_by_pipe1;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button button13;
+        private System.Windows.Forms.NumericUpDown numValue1;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.NumericUpDown numValue2;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button button15;
     }
 }
 
