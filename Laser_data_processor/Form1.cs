@@ -169,7 +169,7 @@ namespace Laser_data_processor
             Matrix4d A1 = T(0, 0, 0, 0);
             Matrix4d A2 = T(-motor1_angle, 0, 0, 90);
             Matrix4d A3 = T(-motor2_angle, 0, 62, 90);
-            Matrix4d A4 = T(0, -(59 + laser_distance), 0, 0);
+            Matrix4d A4 = T(0, -(67 + laser_distance), 0, 0);
 
             Matrix4d M = A1 * A2 * A3 * A4;
             //  Console.WriteLine(M);
