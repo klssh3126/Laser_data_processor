@@ -132,8 +132,6 @@ namespace Laser_data_processor
                     string s2 = list[1];
                     string s3 = list[2];
 
-                    //Console.WriteLine("{0} , {1}, {2}" , list[0], list[1], list[2]);
-
                     double angle1 = double.Parse(list[0]);
                     double angle2 = double.Parse(list[1]);
                     double L_dist = double.Parse(list[2]);
