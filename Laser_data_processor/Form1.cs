@@ -132,9 +132,13 @@ namespace Laser_data_processor
                     string s2 = list[1];
                     string s3 = list[2];
 
-                    double angle1 = double.Parse(list[0]);
-                    double angle2 = double.Parse(list[1]);
-                    double L_dist = double.Parse(list[2]);
+                    double L_dist = double.Parse(list[0]);
+                    double angle1 = double.Parse(list[1]);
+                    double angle2 = double.Parse(list[2]);
+
+                    Console.WriteLine("L_dist : " + L_dist);
+                    Console.WriteLine("angle1 : " + angle1);
+                    Console.WriteLine("angle2 : " + angle2);
 
                     Point3d p1 = func(angle1, angle2, L_dist);
                     Console.WriteLine(p1);
