@@ -132,6 +132,8 @@ namespace Laser_data_processor
                     string s2 = list[1];
                     string s3 = list[2];
 
+                    //Console.WriteLine("{0} , {1}, {2}" , list[0], list[1], list[2]);
+
                     double angle1 = double.Parse(list[0]);
                     double angle2 = double.Parse(list[1]);
                     double L_dist = double.Parse(list[2]);
@@ -164,8 +166,8 @@ namespace Laser_data_processor
             //********  D-H Table   ***************
             Matrix4d A1 = T(0, 0, 0, 0);
             Matrix4d A2 = T(-motor1_angle, 0, 0, 90);
-            Matrix4d A3 = T(-motor2_angle, 6, 62, 90);
-            Matrix4d A4 = T(0, -(59.2 + laser_distance), 0, 0);
+            Matrix4d A3 = T(-motor2_angle, 0, 62, 90);
+            Matrix4d A4 = T(0, -(59 + laser_distance), 0, 0);
 
             Matrix4d M = A1 * A2 * A3 * A4;
             //  Console.WriteLine(M);
