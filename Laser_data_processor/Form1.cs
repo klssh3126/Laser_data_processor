@@ -133,6 +133,8 @@ namespace Laser_data_processor
                     string s3 = list[2];
 
                     double L_dist = double.Parse(list[0]);
+                    L_dist *= 1000; //m단위를 mm로 고쳐줌
+
                     double angle1 = double.Parse(list[1]);
                     double angle2 = double.Parse(list[2]);
 
